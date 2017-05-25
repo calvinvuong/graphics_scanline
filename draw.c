@@ -101,7 +101,37 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
 	else
 	  middle_point_index = j;	
       }
-      /*
+
+      float x0 = polygons->m[0][bottom_point_index];
+      float x1 = x0;
+      float y = min;
+      float dy = 1;
+      float dx0;
+      if ( polygons->m[1][top_point_index] - polygons->m[1][bottom_point_index] == 0 )
+	dx0 = 0;
+      else
+	dx0 = (polygons->m[0][top_point_index] - polygons->m[0][bottom_point_index]) / (polygons->m[1][top_point_index] - polygons->m[1][bottom_point_index]);
+
+      float dx1;
+      if ( polygons->m[1][middle_point_index] - polygons->m[1][bottom_point_index] == 0 )
+	dx1 = 0;
+      else
+	dx1 = (polygons->m[0][middle_point_index] - polygons->m[0][bottom_point_index]) / (polygons->m[1][middle_point_index] - polygons->m[1][bottom_point_index]);
+      
+      while ( y < max ) {
+	if ( y >= polygons->m[1][middle_point_index] ) {
+	  if ( polygons->m[1][top_point_index] - polygons->m[1][middle_point_index] == 0 )
+	    dx1 = 0;
+	  else
+	    dx1 = (polygons->m[0][top_point_index] - polygons->m[0][middle_point_index]) / (polygons->m[1][top_point_index] - polygons->m[1][middle_point_index]);
+	}
+	draw_line(x0, y, x1, y, s, c);
+	x0 += dx0;
+	x1 += dx1;
+	y += dy;
+      }
+      
+      c.green = 255;
       draw_line( polygons->m[0][point],
 		 polygons->m[1][point],
 		 polygons->m[0][point+1],
@@ -117,8 +147,9 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
 		 polygons->m[0][point+2],
 		 polygons->m[1][point+2],
 		 s, c);
-      */
-       }
+      c.green = 0;
+      
+    }
   }
 }
 
